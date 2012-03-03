@@ -9,6 +9,11 @@
  */
 class TimedText_Section
 {
+    /**
+     * Text the section has.
+     *
+     * @var string
+     */
     protected $_text;
 
     /**
