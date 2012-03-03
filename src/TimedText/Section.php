@@ -68,4 +68,21 @@ class TimedText_Section
     {
         return isset($this->_after);
     }
+
+    /**
+     * Whether the section is visible.
+     *
+     * @param  int $current Current timestamp.
+     * @return bool
+     */
+    public function isVisible($current = NULL)
+    {
+        if (is_null($current)) {
+            $current = time();
+        }
+        if ($this->hasBefore() && $current >= $this->_before) {
+            return false;
+        }
+        return true;
+    }
 }

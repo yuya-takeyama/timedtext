@@ -38,4 +38,23 @@ class TimedText_SectionTest extends PHPUnit_Framework_TestCase
         $section = new TimedText_Section('foo');
         $this->assertFalse($section->hasAfter());
     }
+
+    /**
+     * @test
+     */
+    public function isVisible_should_be_true_if_both_befor_and_after_is_not_set()
+    {
+        $section = new TimedText_Section('foo');
+        $this->assertTrue($section->isVisible(time()));
+    }
+
+    /**
+     * @test
+     */
+    public function isVisible_should_be_false_if_current_is_equal_to_before_property()
+    {
+        $current = $before = time();
+        $section = new TimedText_Section('foo', array('before' => $before));
+        $this->assertFalse($section->isVisible($current));
+    }
 }
