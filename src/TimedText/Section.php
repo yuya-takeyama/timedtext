@@ -80,12 +80,36 @@ class TimedText_Section
         if (is_null($current)) {
             $current = time();
         }
-        if ($this->hasBefore() && $current >= $this->_before) {
-            return false;
+        return $this->_isBeforeConditionMet($current) && $this->_isAfterConditionMet($current);
+    }
+
+    /**
+     * Whether before condition is met.
+     *
+     * @param  int  $current Current timestamp.
+     * @return bool
+     */
+    protected function _isBeforeConditionMet($current)
+    {
+        if ($this->hasBefore()) {
+            return $current < $this->_before;
+        } else {
+            return true;
         }
-        if ($this->hasAfter() && $current < $this->_after) {
-            return false;
+    }
+
+    /**
+     * Whether after condition is met.
+     *
+     * @param  int  $current Current timestamp.
+     * @return bool
+     */
+    protected function _isAfterConditionMet($current)
+    {
+        if ($this->hasAfter()) {
+            return $current >= $this->_after;
+        } else {
+            return true;
         }
-        return true;
     }
 }
