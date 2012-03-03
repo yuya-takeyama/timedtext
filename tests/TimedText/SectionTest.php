@@ -115,6 +115,38 @@ class TimedText_SectionTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function isVisible_should_be_true_both_before_and_after_condition_is_met()
+    {
+        $current = $after = time();
+        $before  = $current + 1;
+        $section = new TimedText_Section('foo', array('before' => $before, 'after' => $after));
+        $this->assertTrue($section->isVisible($current));
+    }
+
+    /**
+     * @test
+     */
+    public function isVisible_should_be_false_if_only_before_condition_is_not_met()
+    {
+        $current = $before = $after = time();
+        $section = new TimedText_Section('foo', array('before' => $before, 'after' => $after));
+        $this->assertFalse($section->isVisible($current));
+    }
+
+    /**
+     * @test
+     */
+    public function isVisible_should_be_false_if_only_after_condition_is_not_met()
+    {
+        $current = time();
+        $before  = $after = $current + 1;
+        $section = new TimedText_Section('foo', array('before' => $before, 'after' => $after));
+        $this->assertFalse($section->isVisible($current));
+    }
+
+    /**
+     * @test
+     */
     public function it_should_be_its_text_if_section_is_casted()
     {
         $section = new TimedText_Section('foo');
