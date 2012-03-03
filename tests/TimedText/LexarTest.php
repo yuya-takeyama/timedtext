@@ -61,4 +61,16 @@ class TimedText_LexarTest extends PHPUnit_Framework_TestCase
         $expected = array(new TimedText_Token_EndAfter);
         $this->assertEquals($expected, $this->lexar->tokenize('{/after}'));
     }
+
+    /**
+     * @test
+     */
+    public function tokenize_should_create_text_token_from_no_token_brace()
+    {
+        $expected = array(
+            new TimedText_Token_String('{'),
+            new TimedText_Token_String('notoken}'),
+        );
+        $this->assertEquals($expected, $this->lexar->tokenize('{notoken}'));
+    }
 }

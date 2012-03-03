@@ -75,6 +75,7 @@ class TimedText_Lexar
     const EXPR_BEGIN_AFTER  = '/^\{after (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}/';
     const EXPR_END_AFTER    = '#^\{/after\}#';
     const EXPR_STRING       = '/^([^{]+)/';
+    const EXPR_BRACE        = '/^\{/';
 
     /**
      * @param  string $text
@@ -92,19 +93,28 @@ class TimedText_Lexar
                     TimedText_TokenFactory::TYPE_BEGIN_BEFORE,
                     $matches[1]
                 );
+                $eatLen = mb_strlen($matches[0]);
             } else if (preg_match(self::EXPR_END_BEFORE, $input, $matches)) {
                 $tokens[] = $factory->create(TimedText_TokenFactory::TYPE_END_BEFORE);
+                $eatLen = mb_strlen($matches[0]);
             } else if (preg_match(self::EXPR_BEGIN_AFTER, $input, $matches)) {
                 $tokens[] = $factory->create(
                     TimedText_TokenFactory::TYPE_BEGIN_AFTER,
                     $matches[1]
                 );
+                $eatLen = mb_strlen($matches[0]);
             } else if (preg_match(self::EXPR_END_AFTER, $input, $matches)) {
                 $tokens[] = $factory->create(TimedText_TokenFactory::TYPE_END_AFTER);
+                $eatLen = mb_strlen($matches[0]);
             } else if (preg_match(self::EXPR_STRING, $input, $matches)) {
                 $tokens[] = $factory->create(TimedText_TokenFactory::TYPE_STRING, $matches[1]);
+                $eatLen = mb_strlen($matches[0]);
+            } else if (preg_match(self::EXPR_BRACE, $input, $matches)) {
+                $tokens[] = $factory->create(TimedText_TokenFactory::TYPE_STRING, '{');
+                $eatLen = 1;
             }
-            $pos += mb_strlen($matches[0]);
+            $pos += $eatLen;
+            $input = mb_substr($input, $eatLen);
         }
         return $tokens;
     }
