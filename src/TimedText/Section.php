@@ -58,4 +58,14 @@ class TimedText_Section
     {
         return isset($this->_before);
     }
+
+    /**
+     * Whether the section has after property.
+     *
+     * @return bool
+     */
+    public function hasAfter()
+    {
+        return isset($this->_after);
+    }
 }
