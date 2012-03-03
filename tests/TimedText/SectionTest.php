@@ -111,4 +111,13 @@ class TimedText_SectionTest extends PHPUnit_Framework_TestCase
         $section = new TimedText_Section('foo', array('after' => $after));
         $this->assertTrue($section->isVisible($current));
     }
+
+    /**
+     * @test
+     */
+    public function it_should_be_its_text_if_section_is_casted()
+    {
+        $section = new TimedText_Section('foo');
+        $this->assertEquals('foo', (string)$section);
+    }
 }

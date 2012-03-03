@@ -50,6 +50,16 @@ class TimedText_Section
     }
 
     /**
+     * String cast hook.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->_text;
+    }
+
+    /**
      * Whether the section has before property.
      *
      * @return bool
