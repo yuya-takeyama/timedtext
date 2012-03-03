@@ -70,12 +70,12 @@ class TimedText_TokenFactory
 
 class TimedText_Lexar
 {
-    const EXPR_BEGIN_BEFORE = '/^\{before (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}/';
-    const EXPR_END_BEFORE   = '#^\{/before\}#';
-    const EXPR_BEGIN_AFTER  = '/^\{after (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}/';
-    const EXPR_END_AFTER    = '#^\{/after\}#';
-    const EXPR_STRING       = '/^([^{]+)/';
-    const EXPR_BRACE        = '/^\{/';
+    const EXPR_BEGIN_BEFORE = '/^\{before (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}/u';
+    const EXPR_END_BEFORE   = '#^\{/before\}#u';
+    const EXPR_BEGIN_AFTER  = '/^\{after (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}/u';
+    const EXPR_END_AFTER    = '#^\{/after\}#u';
+    const EXPR_STRING       = '/^([^{]+)/u';
+    const EXPR_BRACE        = '/^\{/u';
 
     /**
      * @param  string $text
