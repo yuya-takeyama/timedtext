@@ -83,6 +83,9 @@ class TimedText_Section
         if ($this->hasBefore() && $current >= $this->_before) {
             return false;
         }
+        if ($this->hasAfter() && $current < $this->_after) {
+            return false;
+        }
         return true;
     }
 }
