@@ -1,6 +1,8 @@
 <?php
 require_once 'TimedText/Text.php';
 
+class TimedText_Parser_Invalid_TokenException extends RuntimeException {}
+
 class TimedText_ParserState
 {
     const OUT_BLOCK = 0;
@@ -28,7 +30,7 @@ class TimedText_ParserState
             $this->setCurrentBlockOptions(array());
             break;
         case self::IN_BEFORE:
-            $this->handleAsInBlock($token);
+            $this->handleAsInBefore($token);
             break;
         case self::IN_AFTER:
             $this->handleAsInAfter($token);
@@ -67,6 +69,8 @@ class TimedText_ParserState
             $this->pushTextStack($token->getString());
         } else if ($token instanceof TimedText_Token_EndBefore) {
             $this->setState(self::OUT_BLOCK);
+        } else {
+            throw new TimedText_Parser_Invalid_TokenException;
         }
     }
 
