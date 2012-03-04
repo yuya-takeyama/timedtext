@@ -23,11 +23,18 @@ class TimedText_Token_String
 
 class TimedText_Token_BeginBefore
 {
-    protected $_time;
+    protected $_timestamp;
 
     public function __construct($datetime)
     {
-        $this->_time = ($datetime);
+        $this->_timestamp = strtotime($datetime);
+    }
+
+    public function getOptions()
+    {
+        return array(
+            'before' => $this->_timestamp,
+        );
     }
 }
 
@@ -35,11 +42,18 @@ class TimedText_Token_EndBefore {}
 
 class TimedText_Token_BeginAfter
 {
-    protected $_time;
+    protected $_timestamp;
 
     public function __construct($datetime)
     {
-        $this->_time = strtotime($datetime);
+        $this->_timestamp = strtotime($datetime);
+    }
+
+    public function getOptions()
+    {
+        return array(
+            'after' => $this->_timestamp,
+        );
     }
 }
 

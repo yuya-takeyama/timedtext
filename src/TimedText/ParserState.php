@@ -1,4 +1,6 @@
 <?php
+require_once 'TimedText/Text.php';
+
 class TimedText_ParserState
 {
     const OUT_BLOCK = 0;
