@@ -74,6 +74,17 @@ class TimedText_ParserState
         }
     }
 
+    public function handleAsInAfter($token)
+    {
+        if ($token instanceof TimedText_String) {
+            $this->pushTextStack($token->getString());
+        } else if ($token instanceof TimedText_Token_EndAfter) {
+            $this->setState(self::OUT_BLOCK);
+        } else {
+            throw new TimedText_Parser_Invalid_TokenException;
+        }
+    }
+
     public function pushTextStack($text)
     {
         $this->_textStack[] = $text;

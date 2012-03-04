@@ -52,6 +52,10 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
             array(TimedText_ParserState::OUT_BLOCK, new TimedText_Token_EndAfter),
             array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_BeginBefore('2000-01-01 00:00')),
             array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_BeginAfter('2000-01-01 00:00')),
+            array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_EndAfter),
+            array(TimedText_ParserState::IN_AFTER, new TimedText_Token_BeginBefore('2000-01-01 00:00')),
+            array(TimedText_ParserState::IN_AFTER, new TimedText_Token_BeginAfter('2000-01-01 00:00')),
+            array(TimedText_ParserState::IN_AFTER, new TimedText_Token_EndBefore),
         );
     }
 }
