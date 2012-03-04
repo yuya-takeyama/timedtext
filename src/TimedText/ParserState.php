@@ -55,9 +55,11 @@ class TimedText_ParserState
         if ($token instanceof TimedText_Token_String) {
             $this->pushTextStack($token->getString());
         } else if ($token instanceof TimedText_Token_BeginBefore) {
+            $this->flushTextStack();
             $this->setState(self::IN_BEFORE);
             $this->setCurrentBlockOptions($token->getOptions());
         } else if ($token instanceof TimedText_Token_BeginAfter) {
+            $this->flushTextStack();
             $this->setState(self::IN_AFTER);
             $this->setCurrentBlockOptions($token->getOptions());
         } else {
