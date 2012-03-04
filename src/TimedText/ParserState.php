@@ -28,7 +28,6 @@ class TimedText_ParserState
         switch ($this->_state) {
         case self::OUT_BLOCK:
             $this->handleAsOutBlock($token);
-            $this->setCurrentBlockOptions(array());
             break;
         case self::IN_BEFORE:
             $this->handleAsInBefore($token);
@@ -60,18 +59,19 @@ class TimedText_ParserState
             $this->setState(self::IN_AFTER);
             $this->setCurrentBlockOptions($token->getOptions());
         } else {
-            throw new TimedText_Parser_Invalid_TokenException;
+            $this->throwInvalidTokenException($token);
         }
     }
 
     public function handleAsInBefore($token)
     {
-        if ($token instanceof TimedText_String) {
+        if ($token instanceof TimedText_Token_String) {
             $this->pushTextStack($token->getString());
         } else if ($token instanceof TimedText_Token_EndBefore) {
+            $this->flushTextStack();
             $this->setState(self::OUT_BLOCK);
         } else {
-            throw new TimedText_Parser_Invalid_TokenException;
+            $this->throwInvalidTokenException($token);
         }
     }
 
@@ -82,8 +82,15 @@ class TimedText_ParserState
         } else if ($token instanceof TimedText_Token_EndAfter) {
             $this->setState(self::OUT_BLOCK);
         } else {
-            throw new TimedText_Parser_Invalid_TokenException;
+            $this->throwInvalidTokenException($token);
         }
+    }
+
+    public function throwInvalidTokenException($token)
+    {
+        throw new TimedText_Parser_Invalid_TokenException(
+            'Invalid token ' . get_class($token) . ' detected in ' . $this->getStateAsString()
+        );
     }
 
     public function pushTextStack($text)
@@ -137,5 +144,15 @@ class TimedText_ParserState
     public function getText()
     {
         return $this->_text;
+    }
+
+    public function getStateAsString()
+    {
+        $map = array(
+            self::OUT_BLOCK => 'OUT_BLOCK',
+            self::IN_BEFORE => 'IN_BEFORE',
+            self::IN_AFTER  => 'IN_AFTER',
+        );
+        return $map[$this->_state];
     }
 }

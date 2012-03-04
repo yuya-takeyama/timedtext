@@ -82,14 +82,38 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider provideInputTokensAndExpectedText
      */
-    public function getText_should_be_Text_object_has_pushed_text()
+    public function getText_should_be_Text_object_has_pushed_text($tokens, $expected)
     {
         $state = new TimedText_ParserState;
-        $state->pushToken(new TimedText_Token_String('foo'));
+        foreach ($tokens as $token) {
+            $state->pushToken($token);
+        }
         $state->flushTextStack();
+        $this->assertEquals($expected, $state->getText());
+    }
+
+    public function provideInputTokensAndExpectedText()
+    {
+        $data = array();
+        $time = strtotime(date('Y-m-d H:i', time()));
+        $datetime = date('Y-m-d H:i', $time);
+
+        $tokens = array(new TimedText_Token_String('foo'));
         $expected = new TimedText_Text;
         $expected->push(new TimedText_Section('foo'));
-        $this->assertEquals($expected, $state->getText());
+        $data[] = array($tokens, $expected);
+
+        $tokens = array(
+            new TimedText_Token_BeginBefore($datetime),
+            new TimedText_Token_String('foo'),
+            new TimedText_Token_EndBefore,
+        );
+        $expected = new TimedText_Text;
+        $expected->push(new TimedText_Section('foo', array('before' => $time)));
+        $data[] = array($tokens, $expected);
+
+        return $data;
     }
 }
