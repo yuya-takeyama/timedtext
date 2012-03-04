@@ -79,4 +79,17 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
         $state->flushTextStack();
         $this->assertEquals(array(), $state->getTextStack());
     }
+
+    /**
+     * @test
+     */
+    public function getText_should_be_Text_object_has_pushed_text()
+    {
+        $state = new TimedText_ParserState;
+        $state->pushToken(new TimedText_Token_String('foo'));
+        $state->flushTextStack();
+        $expected = new TimedText_Text;
+        $expected->push(new TimedText_Section('foo'));
+        $this->assertEquals($expected, $state->getText());
+    }
 }
