@@ -125,4 +125,36 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
 
         return $data;
     }
+
+    /**
+     * @test
+     * @dataProvider provideUnclosedTokens
+     * @expectedException TimedText_Parser_UnclosedBlockException
+     */
+    public function finish_should_throw_UnclosedBlockException_if_unclosed_block_exists($tokens)
+    {
+        $state = new TimedText_ParserState;
+        foreach ($tokens as $token) {
+            $state->pushToken($token);
+        }
+        $state->finish();
+    }
+
+    public function provideUnclosedTokens()
+    {
+        return array(
+            array(
+                array(
+                    new TimedText_Token_BeginBefore('2000-01-01 00:00'),
+                    new TimedText_Token_String('foo'),
+                ),
+            ),
+            array(
+                array(
+                    new TimedText_Token_BeginAfter('2000-01-01 00:00'),
+                    new TimedText_Token_String('foo'),
+                ),
+            ),
+        );
+    }
 }

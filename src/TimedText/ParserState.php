@@ -4,6 +4,8 @@ require_once 'TimedText/Section.php';
 
 class TimedText_Parser_InvalidTokenException extends RuntimeException {}
 
+class TimedText_Parser_UnclosedBlockException extends RuntimeException {}
+
 class TimedText_ParserState
 {
     const OUT_BLOCK = 0;
@@ -123,6 +125,11 @@ class TimedText_ParserState
 
     public function finish()
     {
+        if ($this->getState() !== self::OUT_BLOCK) {
+            throw new TimedText_Parser_UnclosedBlockException(
+                'Unclosed block ' . $this->getStateAsString() . ' is detected.'
+            );
+        }
         $this->flushTextStack();
     }
 
