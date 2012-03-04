@@ -1,4 +1,6 @@
 <?php
+require_once 'TimedText/ParserState.php';
+
 /**
  * TimedText_Parser
  *
@@ -7,13 +9,16 @@
 class TimedText_Parser
 {
     /**
-     * @param  string $text
+     * @param  array<TimedText_Token> $tokens
      * @return TimedText_Text
      */
-    public function parse($input)
+    public function parse($tokens)
     {
-        $text = new TimedText_Text;
-        $text->push(new TimedText_Section($input));
-        return $text;
+        $state = new TimedText_ParserState;
+        foreach ($tokens as $token) {
+            $state->pushToken($token);
+        }
+        $state->finish();
+        return $state->getText();
     }
 }

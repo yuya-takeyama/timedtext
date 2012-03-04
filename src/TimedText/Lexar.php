@@ -14,6 +14,11 @@ class TimedText_Token_String
     {
         $this->_str = $str;
     }
+
+    public function getString()
+    {
+        return $this->_str;
+    }
 }
 
 class TimedText_Token_BeginBefore
