@@ -9,3 +9,5 @@ branches:
   only:
     - master
     - develop
+
+script: phpunit --coverage-text
