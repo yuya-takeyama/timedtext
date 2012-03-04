@@ -123,6 +123,28 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
         $expected->push(new TimedText_Section('foo', array('after' => $time)));
         $data[] = array($tokens, $expected);
 
+        $tokens = array(
+            new TimedText_Token_BeginBefore($datetime),
+            new TimedText_Token_String('foo'),
+            new TimedText_Token_EndBefore,
+            new TimedText_Token_String('bar'),
+        );
+        $expected = new TimedText_Text;
+        $expected->push(new TimedText_Section('foo', array('before' => $time)));
+        $expected->push(new TimedText_Section('bar'));
+        $data[] = array($tokens, $expected);
+
+        $tokens = array(
+            new TimedText_Token_BeginAfter($datetime),
+            new TimedText_Token_String('foo'),
+            new TimedText_Token_EndAfter,
+            new TimedText_Token_String('bar'),
+        );
+        $expected = new TimedText_Text;
+        $expected->push(new TimedText_Section('foo', array('after' => $time)));
+        $expected->push(new TimedText_Section('bar'));
+        $data[] = array($tokens, $expected);
+
         return $data;
     }
 

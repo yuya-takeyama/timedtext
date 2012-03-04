@@ -71,6 +71,7 @@ class TimedText_ParserState
             $this->pushTextStack($token->getString());
         } else if ($token instanceof TimedText_Token_EndBefore) {
             $this->flushTextStack();
+            $this->setCurrentBlockOptions(array());
             $this->setState(self::OUT_BLOCK);
         } else {
             $this->throwInvalidTokenException($token);
@@ -82,6 +83,8 @@ class TimedText_ParserState
         if ($token instanceof TimedText_Token_String) {
             $this->pushTextStack($token->getString());
         } else if ($token instanceof TimedText_Token_EndAfter) {
+            $this->flushTextStack();
+            $this->setCurrentBlockOptions(array());
             $this->setState(self::OUT_BLOCK);
         } else {
             $this->throwInvalidTokenException($token);
