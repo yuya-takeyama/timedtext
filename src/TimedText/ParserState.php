@@ -1,5 +1,6 @@
 <?php
 require_once 'TimedText/Text.php';
+require_once 'TimedText/Section.php';
 
 class TimedText_Parser_Invalid_TokenException extends RuntimeException {}
 
@@ -90,6 +91,11 @@ class TimedText_ParserState
         $this->_textStack[] = $text;
     }
 
+    public function getTextStack()
+    {
+        return $this->_textStack;
+    }
+
     public function hasTextStack()
     {
         return count($this->_textStack) > 0;
@@ -104,6 +110,7 @@ class TimedText_ParserState
                     $this->getCurrentBlockOptions()
                 )
             );
+            $this->clearTextStack();
         }
     }
 

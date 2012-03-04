@@ -58,4 +58,25 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
             array(TimedText_ParserState::IN_AFTER, new TimedText_Token_EndBefore),
         );
     }
+
+    /**
+     * @test
+     */
+    public function getTextStack_should_be_pushed_string_as_token()
+    {
+        $state = new TimedText_ParserState;
+        $state->pushToken(new TimedText_Token_String('foo'));
+        $this->assertEquals(array('foo'), $state->getTextStack());
+    }
+
+    /**
+     * @test
+     */
+    public function getTextStack_should_be_empty_array_if_flushed()
+    {
+        $state = new TimedText_ParserState;
+        $state->pushTextStack('foo');
+        $state->flushTextStack();
+        $this->assertEquals(array(), $state->getTextStack());
+    }
 }
