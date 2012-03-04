@@ -36,7 +36,7 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider provideInvalidStateAndToken
-     * @expectedException TimedText_Parser_Invalid_TokenException
+     * @expectedException TimedText_Parser_InvalidTokenException
      */
     public function pushToken_should_throw_InvalidTokenException_if_invalid_token_is_given($stateCode, $token)
     {

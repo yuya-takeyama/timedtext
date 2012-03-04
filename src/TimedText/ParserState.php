@@ -2,7 +2,7 @@
 require_once 'TimedText/Text.php';
 require_once 'TimedText/Section.php';
 
-class TimedText_Parser_Invalid_TokenException extends RuntimeException {}
+class TimedText_Parser_InvalidTokenException extends RuntimeException {}
 
 class TimedText_ParserState
 {
@@ -88,7 +88,7 @@ class TimedText_ParserState
 
     public function throwInvalidTokenException($token)
     {
-        throw new TimedText_Parser_Invalid_TokenException(
+        throw new TimedText_Parser_InvalidTokenException(
             'Invalid token ' . get_class($token) . ' detected in ' . $this->getStateAsString()
         );
     }
