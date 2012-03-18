@@ -89,10 +89,10 @@ class TimedText_TokenFactory
 
 class TimedText_Lexar
 {
-    const EXPR_BEGIN_BEFORE = '/^\{before (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}/u';
-    const EXPR_END_BEFORE   = '#^\{/before\}#u';
-    const EXPR_BEGIN_AFTER  = '/^\{after (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}/u';
-    const EXPR_END_AFTER    = '#^\{/after\}#u';
+    const EXPR_BEGIN_BEFORE = '/^\{before (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}(?:\r\n|\r|\n)?/u';
+    const EXPR_END_BEFORE   = '#^\{/before\}(?:\r\n|\r|\n)?#u';
+    const EXPR_BEGIN_AFTER  = '/^\{after (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}(?:\r\n|\r|\n)?/u';
+    const EXPR_END_AFTER    = '#^\{/after\}(?:\r\n|\r|\n)?#u';
     const EXPR_STRING       = '/^([^{]+)/u';
     const EXPR_BRACE        = '/^\{/u';
 
