@@ -35,6 +35,16 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function getState_should_be_IN_BETWEEN_if_BeginBetween_Token_is_given()
+    {
+        $state = new TimedText_ParserState;
+        $state->pushToken(new TimedText_Token_BeginBetween('2000-01-01 00:00', '2001-01-01 00:00'));
+        $this->assertEquals(TimedText_ParserState::IN_BETWEEN, $state->getState());
+    }
+
+    /**
+     * @test
      * @dataProvider provideInvalidStateAndToken
      * @expectedException TimedText_Parser_InvalidTokenException
      */
@@ -50,12 +60,22 @@ class TimedText_ParserStateTest extends PHPUnit_Framework_TestCase
         return array(
             array(TimedText_ParserState::OUT_BLOCK, new TimedText_Token_EndBefore),
             array(TimedText_ParserState::OUT_BLOCK, new TimedText_Token_EndAfter),
+            array(TimedText_ParserState::OUT_BLOCK, new TimedText_Token_EndBetween),
             array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_BeginBefore('2000-01-01 00:00')),
             array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_BeginAfter('2000-01-01 00:00')),
             array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_EndAfter),
+            array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_BeginBetween('2000-01-01 00:00', '2001-01-01 00:00')),
+            array(TimedText_ParserState::IN_BEFORE, new TimedText_Token_EndBetween),
             array(TimedText_ParserState::IN_AFTER, new TimedText_Token_BeginBefore('2000-01-01 00:00')),
             array(TimedText_ParserState::IN_AFTER, new TimedText_Token_BeginAfter('2000-01-01 00:00')),
             array(TimedText_ParserState::IN_AFTER, new TimedText_Token_EndBefore),
+            array(TimedText_ParserState::IN_AFTER, new TimedText_Token_BeginBetween('2000-01-01 00:00', '2001-01-01 00:00')),
+            array(TimedText_ParserState::IN_AFTER, new TimedText_Token_EndBetween),
+            array(TimedText_ParserState::IN_BETWEEN, new TimedText_Token_BeginBefore('2000-01-01 00:00')),
+            array(TimedText_ParserState::IN_BETWEEN, new TimedText_Token_EndBefore),
+            array(TimedText_ParserState::IN_BETWEEN, new TimedText_Token_BeginAfter('2000-01-01 00:00')),
+            array(TimedText_ParserState::IN_BETWEEN, new TimedText_Token_EndAfter),
+            array(TimedText_ParserState::IN_BETWEEN, new TimedText_Token_BeginBetween('2000-01-01 00:00', '2001-01-01 00:00')),
         );
     }
 

@@ -11,6 +11,7 @@ class TimedText_ParserState
     const OUT_BLOCK = 0;
     const IN_BEFORE = 1;
     const IN_AFTER  = 2;
+    const IN_BETWEEN = 3;
 
     protected $_textStack;
 
@@ -37,6 +38,9 @@ class TimedText_ParserState
         case self::IN_AFTER:
             $this->handleAsInAfter($token);
             break;
+        case self::IN_BETWEEN;
+            $this->handleAsInBetween($token);
+            break;
         }
     }
 
@@ -62,6 +66,10 @@ class TimedText_ParserState
             $this->flushTextStack();
             $this->setState(self::IN_AFTER);
             $this->setCurrentBlockOptions($token->getOptions());
+        } else if ($token instanceof TimedText_Token_BeginBetween) {
+            $this->flushTextStack();
+            $this->setState(self::IN_BETWEEN);
+            $this->setCurrentBlockOptions($token->getOptions());
         } else {
             $this->throwInvalidTokenException($token);
         }
@@ -85,6 +93,19 @@ class TimedText_ParserState
         if ($token instanceof TimedText_Token_String) {
             $this->pushTextStack($token->getString());
         } else if ($token instanceof TimedText_Token_EndAfter) {
+            $this->flushTextStack();
+            $this->setCurrentBlockOptions(array());
+            $this->setState(self::OUT_BLOCK);
+        } else {
+            $this->throwInvalidTokenException($token);
+        }
+    }
+
+    public function handleAsInBetween($token)
+    {
+        if ($token instanceof TimedText_Token_String) {
+            $this->pushTextStack($token->getString());
+        } else if ($token instanceof TimedText_Token_EndBetween) {
             $this->flushTextStack();
             $this->setCurrentBlockOptions(array());
             $this->setState(self::OUT_BLOCK);
@@ -164,6 +185,7 @@ class TimedText_ParserState
             self::OUT_BLOCK => 'OUT_BLOCK',
             self::IN_BEFORE => 'IN_BEFORE',
             self::IN_AFTER  => 'IN_AFTER',
+            self::IN_BETWEEN => 'IN_BETWEEN',
         );
         return $map[$this->_state];
     }
