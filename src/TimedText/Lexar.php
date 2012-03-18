@@ -61,21 +61,21 @@ class TimedText_Token_EndAfter {}
 
 class TimedText_Token_BeginBetween
 {
-    protected $_before;
-
     protected $_after;
 
-    public function __construct($beforeDatetime, $afterDatetime)
+    protected $_before;
+
+    public function __construct($afterDatetime, $beforeDatetime)
     {
-        $this->_before = strtotime($beforeDatetime);
         $this->_after  = strtotime($afterDatetime);
+        $this->_before = strtotime($beforeDatetime);
     }
 
     public function getOptions()
     {
         return array(
-            'before' => $this->_before,
             'after'  => $this->_after,
+            'before' => $this->_before,
         );
     }
 }

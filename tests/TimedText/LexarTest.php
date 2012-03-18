@@ -109,10 +109,10 @@ class TimedText_LexarTest extends PHPUnit_Framework_TestCase
      */
     public function tokenize_can_create_BeginBetween_token()
     {
-        $before = '2000/01/01 00:00';
-        $after = '2001/01/01 00:00';
-        $expected = array(new TimedText_Token_BeginBetween($before, $after));
-        $this->assertEquals($expected, $this->lexar->tokenize("{between {$before} - {$after}}"));
+        $after = '2000/01/01 00:00';
+        $before = '2001/01/01 00:00';
+        $expected = array(new TimedText_Token_BeginBetween($after, $before));
+        $this->assertEquals($expected, $this->lexar->tokenize("{between {$after} - {$before}}"));
     }
 
     /**
@@ -144,6 +144,25 @@ class TimedText_LexarTest extends PHPUnit_Framework_TestCase
             new TimedText_Token_String('notoken}'),
         );
         $this->assertEquals($expected, $this->lexar->tokenize('{notoken}'));
+    }
+
+    /**
+     * @test
+     */
+    public function BeginBetween_token_should_have_before_and_after_property_correctly()
+    {
+        $afterDatetime   = '2000-01-01 00:00';
+        $beforeDatetime  = '2001-01-01 00:00';
+        $afterTimestamp  = strtotime($afterDatetime);
+        $beforeTimestamp = strtotime($beforeDatetime);
+        $token = new TimedText_Token_BeginBetween($afterDatetime, $beforeDatetime);
+        $this->assertEquals(
+            array(
+                'after'  => $afterTimestamp,
+                'before' => $beforeTimestamp,
+            ),
+            $token->getOptions()
+        );
     }
 
     public function lineBreakProvider()

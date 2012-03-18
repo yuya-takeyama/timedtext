@@ -8,8 +8,8 @@ class TimedTextTest extends PHPUnit_Framework_TestCase
      */
     public function convert_should_work_correctly()
     {
-        $before = strtotime("2000-01-01 00:00");
-        $after  = strtotime("2001-01-01 00:00");
+        $time1  = strtotime("2000-01-01 00:00");
+        $time2 = strtotime("2001-01-01 00:00");
         $input  = "Beginning\n" .
                   "{before 2000-01-01 00:00}\n" .
                   "Before block\n" .
@@ -24,14 +24,14 @@ class TimedTextTest extends PHPUnit_Framework_TestCase
         $expected = new TimedText_Text;
         $expected->push(new TimedText_Section("Beginning\n"));
         $expected->push(new TimedText_Section("Before block\n", array(
-            'before' => $before,
+            'before' => $time1,
         )));
         $expected->push(new TimedText_Section("Between block\n", array(
-            'before' => $before,
-            'after'  => $after,
+            'after'  => $time1,
+            'before' => $time2,
         )));
         $expected->push(new TimedText_Section("After block\n", array(
-            'after'  => $after,
+            'after'  => $time2,
         )));
         $expected->push(new TimedText_Section('Out of block'));
         $this->assertEquals($expected, TimedText::convert($input));
