@@ -10,7 +10,8 @@ class TimedTextTest extends PHPUnit_Framework_TestCase
     {
         $before = strtotime("2000-01-01 00:00");
         $after  = strtotime("2001-01-01 00:00");
-        $input  = "{before 2000-01-01 00:00}\n" .
+        $input  = "Beginning\n" .
+                  "{before 2000-01-01 00:00}\n" .
                   "Before block\n" .
                   "{/before}\n" .
                   "{between 2000-01-01 00:00 - 2001-01-01 00:00}\n" .
@@ -21,17 +22,18 @@ class TimedTextTest extends PHPUnit_Framework_TestCase
                   "{/after}\n" .
                   "Out of block";
         $expected = new TimedText_Text;
-        $expected->push(new TimedText_Section('Before block', array(
+        $expected->push(new TimedText_Section("Beginning\n"));
+        $expected->push(new TimedText_Section("Before block\n", array(
             'before' => $before,
         )));
-        $expected->push(new TimedText_Section('Between block', array(
+        $expected->push(new TimedText_Section("Between block\n", array(
             'before' => $before,
             'after'  => $after,
         )));
-        $expected->push(new TimedText_Section('After block', array(
+        $expected->push(new TimedText_Section("After block\n", array(
             'after'  => $after,
         )));
-        $expected->push(new TimedText_Section('Out of Block'));
+        $expected->push(new TimedText_Section('Out of block'));
         $this->assertEquals($expected, TimedText::convert($input));
     }
 }
