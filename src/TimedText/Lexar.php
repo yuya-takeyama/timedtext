@@ -59,6 +59,29 @@ class TimedText_Token_BeginAfter
 
 class TimedText_Token_EndAfter {}
 
+class TimedText_Token_BeginBetween
+{
+    protected $_before;
+
+    protected $_after;
+
+    public function __construct($beforeDatetime, $afterDatetime)
+    {
+        $this->_before = strtotime($beforeDatetime);
+        $this->_after  = strtotime($afterDatetime);
+    }
+
+    public function getOptions()
+    {
+        return array(
+            'before' => $this->_before,
+            'after'  => $this->_after,
+        );
+    }
+}
+
+class TimedText_Token_EndBetween {}
+
 class TimedText_TokenFactory
 {
     const TYPE_STRING       = 0;
@@ -66,8 +89,10 @@ class TimedText_TokenFactory
     const TYPE_END_BEFORE   = 2;
     const TYPE_BEGIN_AFTER  = 3;
     const TYPE_END_AFTER    = 4;
+    const TYPE_BEGIN_BETWEEN = 5;
+    const TYPE_END_BETWEEN  = 6;
 
-    public function create($type, $value = NULL)
+    public function create($type, $value = NULL, $value2 = NULL)
     {
         switch ($type)
         {
@@ -81,6 +106,10 @@ class TimedText_TokenFactory
             return new TimedText_Token_BeginAfter($value);
         case self::TYPE_END_AFTER:
             return new TimedText_Token_EndAfter;
+        case self::TYPE_BEGIN_BETWEEN:
+            return new TimedText_Token_BeginBetween($value, $value2);
+        case self::TYPE_END_BETWEEN:
+            return new TimedText_Token_EndBetween;
         default:
             throw new InvalidArgumentException("Undefined token type '{$type}' is specified.");
         }
@@ -93,6 +122,8 @@ class TimedText_Lexar
     const EXPR_END_BEFORE   = '#^\{/before\}(?:\r\n|\r|\n)?#u';
     const EXPR_BEGIN_AFTER  = '/^\{after (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}(?:\r\n|\r|\n)?/u';
     const EXPR_END_AFTER    = '#^\{/after\}(?:\r\n|\r|\n)?#u';
+    const EXPR_BEGIN_BETWEEN  = '/^\{between (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2}) \- (\d{4}[\-\/]\d{1,2}[\-\/]\d{1,2} \d{1,2}:\d{1,2})\}(?:\r\n|\r|\n)?/u';
+    const EXPR_END_BETWEEN  = '#^\{/between\}(?:\r\n|\r|\n)?#u';
     const EXPR_STRING       = '/^([^{]+)/u';
     const EXPR_BRACE        = '/^\{/u';
 
@@ -124,6 +155,16 @@ class TimedText_Lexar
                 $eatLen = mb_strlen($matches[0]);
             } else if (preg_match(self::EXPR_END_AFTER, $input, $matches)) {
                 $tokens[] = $factory->create(TimedText_TokenFactory::TYPE_END_AFTER);
+                $eatLen = mb_strlen($matches[0]);
+            } else if (preg_match(self::EXPR_BEGIN_BETWEEN, $input, $matches)) {
+                $tokens[] = $factory->create(
+                    TimedText_TokenFactory::TYPE_BEGIN_BETWEEN,
+                    $matches[1],
+                    $matches[2]
+                );
+                $eatLen = mb_strlen($matches[0]);
+            } else if (preg_match(self::EXPR_END_BETWEEN, $input, $matches)) {
+                $tokens[] = $factory->create(TimedText_TokenFactory::TYPE_END_BETWEEN);
                 $eatLen = mb_strlen($matches[0]);
             } else if (preg_match(self::EXPR_STRING, $input, $matches)) {
                 $tokens[] = $factory->create(TimedText_TokenFactory::TYPE_STRING, $matches[1]);

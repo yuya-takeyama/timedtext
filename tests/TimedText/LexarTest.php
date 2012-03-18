@@ -107,6 +107,36 @@ class TimedText_LexarTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function tokenize_can_create_BeginBetween_token()
+    {
+        $before = '2000/01/01 00:00';
+        $after = '2001/01/01 00:00';
+        $expected = array(new TimedText_Token_BeginBetween($before, $after));
+        $this->assertEquals($expected, $this->lexar->tokenize("{between {$before} - {$after}}"));
+    }
+
+    /**
+     * @test
+     */
+    public function tokenize_can_create_EndBetween_token()
+    {
+        $expected = array(new TimedText_Token_EndBetween);
+        $this->assertEquals($expected, $this->lexar->tokenize('{/between}'));
+    }
+
+    /**
+     * @test
+     * @dataProvider lineBreakProvider
+     */
+    public function a_linebreak_after_EndBetween_token_should_be_omitted($lineBreak)
+    {
+        $expected = array(new TimedText_Token_EndBetween);
+        $this->assertEquals($expected, $this->lexar->tokenize("{/between}{$lineBreak}"));
+    }
+
+    /**
+     * @test
+     */
     public function tokenize_should_create_String_token_from_no_token_brace()
     {
         $expected = array(
