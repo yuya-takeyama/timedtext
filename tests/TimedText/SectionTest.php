@@ -24,6 +24,16 @@ class TimedText_SectionTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function getBefore_should_be_timestamp_it_is_set_on_constructor()
+    {
+        $time = time();
+        $section = new TimedText_Section('foo', array('before' => $time));
+        $this->assertEquals($time, $section->getBefore());
+    }
+
+    /**
+     * @test
+     */
     public function hasAfter_should_be_true_if_after_is_set()
     {
         $section = new TimedText_Section('foo', array('after' => time()));
@@ -37,6 +47,16 @@ class TimedText_SectionTest extends PHPUnit_Framework_TestCase
     {
         $section = new TimedText_Section('foo');
         $this->assertFalse($section->hasAfter());
+    }
+
+    /**
+     * @test
+     */
+    public function getAfter_should_be_timestamp_it_is_set_on_constructor()
+    {
+        $time = time();
+        $section = new TimedText_Section('foo', array('after' => $time));
+        $this->assertEquals($time, $section->getAfter());
     }
 
     /**

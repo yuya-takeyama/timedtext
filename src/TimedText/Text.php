@@ -6,7 +6,7 @@
  *
  * @author Yuya Takeyama
  */
-class TimedText_Text
+class TimedText_Text implements IteratorAggregate
 {
     /**
      * Sections.
@@ -29,6 +29,11 @@ class TimedText_Text
             }
         }
         return $result;
+    }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->_sections);
     }
 
     /**

@@ -70,6 +70,16 @@ class TimedText_Section
     }
 
     /**
+     * Gets the timestamp set as before property.
+     *
+     * @return int
+     */
+    public function getBefore()
+    {
+        return $this->_before;
+    }
+
+    /**
      * Whether the section has after property.
      *
      * @return bool
@@ -77,6 +87,16 @@ class TimedText_Section
     public function hasAfter()
     {
         return isset($this->_after);
+    }
+
+    /**
+     * Gets the timestamp set as after property.
+     *
+     * @return
+     */
+    public function getAfter()
+    {
+        return $this->_after;
     }
 
     /**
