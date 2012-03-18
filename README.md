@@ -27,6 +27,10 @@ TimedText
 使い方
 ------
 
+### 通常の変換
+
+TimedText の構文を解釈し, 現在時刻に照らし合わせて表示できるセクションのみ表示します.
+
 ```php
 <?php
 require_once 'TimedText.php';
@@ -49,6 +53,58 @@ $input =<<< __INPUT__
 __INPUT__;
 
 echo TimedText::convert($input);
+```
+
+`TimedText::convert()` の返り値は `TimedText\_Text` オブジェクトです.  
+このオブジェクトはマジックメソッド `__toString()` を実装するため, `echo` したり文字列と連結したりすると, 自動的に `string` 型としてキャストされます.
+
+### 任意時刻を指定して変換
+
+`TimedText_Text->__toString()` ではメソッド内で `time()` 関数を呼び出し, 現在時刻に照らして出力を行いますが, `TimedText_Text->at($timestamp)` メソッドを使用することで, 任意の時刻に照らした変換を行います.
+
+```php
+<?php
+// 現在時刻より 1 分後の時刻を指定して変換.
+echo TimedText::convert($input)->at(time() + 60);
+```
+
+### 各セクションの詳細情報を取得
+
+`TimedText_Text` オブジェクトは複数の `TimedText_Section` オブジェクトから成ります.  
+`TimedText_Text` オブジェクトは `IteratorAggregate` インターフェイスを実装しているため, `foreach` 文によるイテレーションが可能です.
+
+それぞれのセクションは `いつから` `いつまで` 出力可能か, という情報を持っていることがあります.  
+表示可能な期間を持っていれば, その条件に合致したときだけ出力され, 持たないときは常に表示されます.
+
+各セクションがが持つ文字列や, `いつから` `いつまで` 出力可能か, といった情報については `TimedText_Section` オブジェクトに問い合わせることができます.
+
+```php
+<?php
+$text = TimedText::convert($input);
+
+// $text は複数の $section を持っている.
+foreach ($text as $section) {
+    // このセクションは出力可能か.
+    // 引数としてタイムスタンプを渡すことで, 任意の時刻について問い合わせることも可能です.
+    var_dump($section->isVisible());
+
+    // いつ以降表示可能, という条件を持っているか.
+    if ($text->hasAfter()) {
+        // いつ以降表示可能, の条件をタイムスタンプで取得.
+        echo $text->getAfter(), PHP_EOL;
+    }
+
+    // いつまで表示可能, という条件を持っているか.
+    if ($text->hasBefore()) {
+        // いつまで表示可能, の条件をタイムスタンプで取得.
+        echo $text->getBefore(), PHP_EOL;
+    }
+
+    // このセクションが持つ文字列を出力.
+    // マジックメソッド __toString() が実行されます.
+    // これは時刻に関係なく, 持っている文字列の情報を常に出力します.
+    echo $text, PHP_EOL;
+}
 ```
 
 作者
