@@ -22,9 +22,14 @@ class TimedText_Text implements IteratorAggregate
      */
     public function __toString()
     {
+        return $this->at(time());
+    }
+
+    public function at($time)
+    {
         $result = '';
         foreach ($this->_sections as $section) {
-            if ($section->isVisible()) {
+            if ($section->isVisible($time)) {
                 $result .= (string)$section;
             }
         }
